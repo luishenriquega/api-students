@@ -38,9 +38,12 @@ func createStudent(c echo.Context) error {
 	if err := c.Bind(&student); err != nil {
 		return err
 	}
-	db.AddStudent(student)
-	return c.String(http.StatusOK, "Create student")
-}
+	if err := db.AddStudent(student); err != nil {
+		return c.String(http.StatusInternalServerError, "Error to Create student")
+	}
+
+		return c.String(http.StatusOK, "Create student")
+	}
 
 func getStudent(c echo.Context) error {
 	id := c.Param("id")
